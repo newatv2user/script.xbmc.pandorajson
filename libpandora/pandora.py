@@ -8,7 +8,7 @@ from utils import JsonGetURL
 import time
 import urllib, urllib2
 
-BASE_URL = piano.PIANO_RPC_HOST + piano.PIANO_RPC_PATH
+#BASE_URL = piano.PIANO_RPC_HOST + piano.PIANO_RPC_PATH
 
 class PandoraError(Exception):
     def __init__(self, code, message):
@@ -18,6 +18,9 @@ class PandoraError(Exception):
 class Pandora:
     def __init__(self):
         self.Settings = Settings()
+        # Opener
+        self.opener = urllib2.build_opener()
+        # Proxy
         self.setProxy()
         # Partner Init
         self.partner = PianoPartner()
@@ -30,9 +33,7 @@ class Pandora:
         # User
         self.user = PianoUserInfo()
         # Station list
-        self.stations = []
-        # Opener
-        self.opener = urllib2.build_opener()
+        self.stations = []        
         self.currentStation = None
         # Reauthentication
         self.Reauthenticate = False
@@ -45,7 +46,7 @@ class Pandora:
                                 "version": "5",
                                 "includeUrls": True})
         # Use secure connection for login
-        Url = 'https://' + BASE_URL + 'method=auth.partnerLogin'
+        Url = 'https://' + self.Settings.Base_Url + 'method=auth.partnerLogin'
         responseData = JsonGetURL(Url, postData, self.opener)
         if not self.ValidateResponse(responseData):
             return False
@@ -74,7 +75,7 @@ class Pandora:
         encPostData = self.partner.out.encrypt(postData)
         urlencAuthToken = urllib.quote_plus(self.partner.authToken)
         # Use secure connection for login
-        Url = 'https://' + BASE_URL + "method=auth.userLogin&auth_token=%s&partner_id=%i" % (urlencAuthToken, self.partner.id)
+        Url = 'https://' + self.Settings.Base_Url + "method=auth.userLogin&auth_token=%s&partner_id=%i" % (urlencAuthToken, self.partner.id)
         responseData = JsonGetURL(Url, encPostData, self.opener)
         #print "Response in UserLogin: " + responseData        
         if not self.ValidateResponse(responseData):
@@ -192,7 +193,7 @@ class Pandora:
             prefix = 'https://'
         else:
             prefix = 'http://'
-        Url = prefix + BASE_URL + "method=%s&auth_token=%s&partner_id=%i&user_id=%s" % (method,
+        Url = prefix + self.Settings.Base_Url + "method=%s&auth_token=%s&partner_id=%i&user_id=%s" % (method,
                                                                                            urlencAuthToken,
                                                                                            self.partner.id,
                                                                                            self.user.listenerId)

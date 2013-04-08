@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.xbmc.pandorajson"
        name="Pandora Json"
-       version="1.3.00"
+       version="1.3.02"
        provider-name="spbogie, newatv2user">
   <requires>
     <import addon="xbmc.python" version="1.0"/>

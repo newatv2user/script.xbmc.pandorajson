@@ -33,6 +33,9 @@ if __settings__.getSetting("firstrun") == "true":
 	__settings__.setSetting("firstrun", "false")
 
 class PandaException(Exception):
+	def __init__(self):
+		xbmcgui.Dialog().ok("Pandora", \
+			"An exception has occurred. Disable Pandora One and try again")
 	pass
 
 class Panda:
@@ -108,6 +111,8 @@ class Panda:
 			raise PandaException()
 		items = []
 		fragment = self.pandora.GetPlaylist(self.curStation)
+		if len(fragment) < 1:
+			raise PandaException()
 		for s in fragment:
 
 			thumbnail = s.coverArt

@@ -5,6 +5,7 @@ Created on May 24, 2012
 '''
 
 PIANO_RPC_HOST = "tuner.pandora.com"
+PIANO_ONE_HOST = "internal-tuner.pandora.com"
 PIANO_RPC_PATH = "/services/json/?"
 
 class PianoUserInfo:
